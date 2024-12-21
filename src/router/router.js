@@ -47,17 +47,18 @@ export class Router {
 
   // 이벤트 리스너 추가
   addEventListeners() {
-    // 로그아웃 버튼 이벤트
+    // 로그아웃 기능
     const logoutBtn = document.getElementById("logout-btn");
     if (logoutBtn) {
       logoutBtn.addEventListener("click", () => {
-        localStorage.removeItem("user"); // 로컬스토리지에서 사용자 정보 제거
+        localStorage.removeItem("user"); // 사용자 아이디 제거
+        localStorage.removeItem("email"); // 사용자 이메일 제거
+        localStorage.removeItem("text"); // 사용자 자기소개 제거
         this.navigate("/login"); // 로그인 페이지로 리다이렉트
       });
     }
 
-    // 로그인 폼 제출 이벤트
-    console.log(window.location.pathname);
+    // 로그인 기능
     const loginForm = document.querySelector(".login-btn");
     if (loginForm) {
       loginForm.addEventListener("click", (e) => {
@@ -68,6 +69,30 @@ export class Router {
         if (username) {
           localStorage.setItem("user", JSON.stringify({ username }));
           this.navigate("/profile");
+        }
+      });
+    }
+
+    //프로필 업데이트
+    const profileUpdate = document.querySelector(".profile-btn");
+    if (profileUpdate) {
+      profileUpdate.addEventListener("click", (e) => {
+        e.preventDefault();
+        const username = document
+          .querySelector('input[type="text"]')
+          .value.trim();
+        const userEmail = document
+          .querySelector('input[type="email"]')
+          .value.trim();
+        const userIntroTxt = document.querySelector(".intro-text").value.trim();
+        if (userEmail && userIntroTxt) {
+          localStorage.setItem("user", JSON.stringify({ username }));
+          localStorage.setItem("email", JSON.stringify({ userEmail }));
+          localStorage.setItem("text", JSON.stringify({ userIntroTxt }));
+
+          alert("프로필이 업데이트되었습니다.");
+        } else {
+          alert("모든 필드를 입력해주세요.");
         }
       });
     }
